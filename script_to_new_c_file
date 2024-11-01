@@ -1,0 +1,24 @@
+vimm() {
+    if [ "$#" -ne 1 ]; then
+        echo "Usage: openvimfile <filename>"
+        return 1
+    fi
+
+    FILE="$1"
+
+    # Create the file and write the C code if it doesn't exist
+    if [ ! -f "$FILE" ]; then
+        cat <<EOL > "$FILE"
+#include<stdio.h>
+int main(void)
+{
+
+}
+EOL
+    fi
+
+    # Open the file with Vim
+    vim "$FILE"
+}
+
+# Add above code to .bashrc and do $source .bashrc
