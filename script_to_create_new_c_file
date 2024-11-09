@@ -1,0 +1,31 @@
+#Usage: Add this code to .bashrc ,then do $source .bashrc . Then open any file with .c extention with vimm command: Ex: $vimm Hello_world.c
+vimm() {
+    if [ "$#" -ne 1 ]; then
+        echo "Usage: openvimfile <filename>"
+        return 1
+    fi
+
+    FILE="$1"
+
+    # Check if the filename ends with .c extension
+    if [[ "$FILE" != *.c ]]; then
+        echo "Error: The filename must have a .c extension."
+        return 1
+    fi
+
+    # Create the file and write the C code if it doesn't exist
+    if [ ! -f "$FILE" ]; then
+        cat <<EOL > "$FILE"
+#include<stdio.h>
+int main(void)
+{
+
+}
+EOL
+    fi
+
+    # Open the file with Vim
+    vim "$FILE"
+}
+
+# Add above code to .bashrc and do $source .bashrc
