@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Replace with your GitHub username and personal access token
+GITHUB_USERNAME="<>"
+GITHUB_TOKEN="<>"
+
+# Fetch the list of all repository names (private)
+#REPOS=$(curl -s -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/users/$GITHUB_USERNAME/repos | jq -r '.[].name')
+
+# Fetch the list of all repository names (public and private)
+REPOS=$(curl -s -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/user/repos?per_page=100 | jq -r '.[].name')
+
+# Create a directory for cloning repos
+echo "Creating cloned_github_repos folder"
+mkdir -p cloned_github_repos
+cd cloned_github_repos
+echo "done"
+
+# Clone or pull each repository
+for REPO in $REPOS; do
+    if [ -d "$REPO" ]; then
+        echo "Updating repository \"$REPO\""
+        cd $REPO
+        git pull
+        cd ..
+    else
+        git clone https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/$GITHUB_USERNAME/$REPO.git
+    fi
+done
+
+echo "All repositories cloned and updated successfully!"
